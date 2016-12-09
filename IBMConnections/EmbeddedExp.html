@@ -1,0 +1,86 @@
+<script type="text/javascript">
+    RED.nodes.registerType(
+        'EmbeddedExpOut',
+        {
+            category: "social",
+            inputs: 1,
+            outputs:1,
+            icon: "ibmconnections.png",
+            color: "#FFFFFF",
+            align: "right",
+            label: 'EmbeddedExp',
+            paletteLabel : "EmbeddedExp",
+            defaults : {
+                name: {
+                    value: ""
+                },
+                server: {
+                    value : "",
+                    required: true,
+                    type: "ICLogin"
+                },
+                target: {
+                    value : "myboard",
+                    required: true
+                },
+                targetValue: {
+                    value : "",
+                    required: false
+                },
+            },
+            oneditprepare: updateFormEmbExp
+        });
+
+	function updateFormEmbExp() {
+	   if (document.querySelector("#node-input-target").value === "person"){
+			document.querySelector("#targetValueRow").style.display = "inline";
+	   } else {
+			document.querySelector("#targetValueRow").style.display = "none";
+	   }
+	}
+
+</script>
+
+<script type="text/x-red" data-template-name="EmbeddedExpOut">
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-input-server" placeholder="Server"></input>
+    </div>
+    
+    <div class="form-row">
+        <label for="node-input-target"><i class="fa fa-arrow-circle-right"></i> Target</label>
+		<select id="node-input-target" onchange="updateFormEmbExp()">
+			<option value="myboard">My board</option>
+			<option value="person">Someonelse's board</option>
+		</select>
+    </div>
+    
+    <div class="form-row" id="targetValueRow">
+        <label for="node-input-targetValue"><i class="fa fa-user"></i> User</label>
+        <input type="text" id="node-input-targetValue" placeholder="i.e. toto@myorg.com OR 51689d40-e7ed-102f-87b6-86a3c2278316"></input>
+    </div>
+    
+    <br/>
+    <br/>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</span></label>
+        <input type="text" id="node-input-name" ></input>
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="EmbeddedExpOut">
+   <p>Sends an event with an Embedded Experience to the IBM Connections (Cloud or On Premises) Activity Stream of the selected user.</p>
+   <p>It accepts, in input as <code>msg.payload</code>, a JSON object containing the Payload to be sent to the IBM Connections Server. It substitues the string "<i>$$$server$$$</i>" with the actual URL of the IBM Connections Server selected as target.</p>
+   <p>It can also accept as input <code>msg.target</code>. If set, this parameter can replace the value of <b>User ID</b> when the Target is NOT <i>My Board</i>. Thus <code>msg.target</code>can be either the UUID or the Mail Address of a person.</p>
+   <br/>
+   <p><i>Returns:</i> 
+   <ul>
+       <li><code>msg.status_url</code> containing the URL of the posted event</li>
+       <li><code>msg.status</code> the JSON representation of the IBM Connections response</li>
+       <li><code>msg.payload</code> containing the actual payload received from the IBM Connections server.</li>
+   </ul>
+   </p>
+</script>
+
+

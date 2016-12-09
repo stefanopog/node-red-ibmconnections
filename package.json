@@ -1,0 +1,86 @@
+{
+  "name": "node-red-ibmconnections",
+  "version": "0.1.9",
+   "description": "Set of nodes to manipulate IBM Connections APIs",
+  "dependencies": {
+    "request": "*",
+    "xml2js": "*"
+  },
+  "keywords": [
+    "node-red",
+    "ibm",
+    "connections",
+    "profiles",
+    "status",
+    "update"
+  ],
+  "author": {
+    "name": "Romain Lienard",
+    "email": "rlienard@gmail.com"
+  },
+   "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefanopog/node-red-ibmconnections.git"
+  },
+   "node-red": {
+    "nodes": {
+      "ICLogin": "IBMConnections/ICLogin.js",
+      "Embedded Exp out": "IBMConnections/EmbeddedExp.js",
+      "Profiles": "IBMConnections/Profiles.js",
+      "Activities": "IBMConnections/Activities.js"
+    }
+  },
+
+    
+"_args": [
+    [
+      "node-red-ibmconnections",
+      ""
+    ]
+  ],
+  "_from": "node-red-ibmconnections@latest",
+  "_id": "node-red-ibmconnections@0.1.9",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/node-red-ibmconnections",
+  "_npmUser": {
+    "email": "rlienard@gmail.com",
+    "name": "rlienard"
+  },
+  "_npmVersion": "1.4.28",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "node-red-ibmconnections",
+    "raw": "node-red-ibmconnections",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-red-ibmconnections/-/node-red-ibmconnections-0.1.9.tgz",
+  "_shasum": "3ee3a820ee154425702cbae650617b9ab3407b9d",
+  "_shrinkwrap": null,
+  "_spec": "node-red-ibmconnections",
+  "_where": "",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "3ee3a820ee154425702cbae650617b9ab3407b9d",
+    "tarball": "https://registry.npmjs.org/node-red-ibmconnections/-/node-red-ibmconnections-0.1.9.tgz"
+  },
+  "maintainers": [
+    {
+      "email": "rlienard@gmail.com",
+      "name": "rlienard"
+    },
+    {
+      "email": "stefano@poglianis.net",
+      "name": "coccobill"
+    }
+  ],
+  "optionalDependencies": {},
+  "scripts": {}
+}

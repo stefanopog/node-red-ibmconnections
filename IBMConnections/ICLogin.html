@@ -1,0 +1,90 @@
+<script type="text/javascript">
+    RED.nodes.registerType('ICLogin',
+						   {
+								category: "config",
+								inputs: 1,
+								outputs:1,
+								icon: "ibmconnections.png",
+								color: "#FFFFFF",
+								label: function(){
+										if (this.serverType == "cloud") {
+											return this.cloudServer;
+										} else {
+											return this.server;
+										}
+								},
+								paletteLabel : "iclogin",
+								credentials: {
+									username: {type:"text"},
+									password: {type:"password"}
+								},
+								defaults : {
+									serverType: {
+										value : "cloud",
+										required: true
+									},
+									cloudServer: {
+										value : "europe",
+										required: false
+									},
+									server: {
+										value : "https://w3-connections.ibm.com",
+										required: false
+									}
+								},
+								oneditprepare: updateServerType
+						   }
+	);
+	
+	function updateServerType(){
+		if (document.querySelector("#node-config-input-serverType").value == "cloud"){
+			document.querySelector("#cloudServer").style.display = "inline";
+			document.querySelector("#premServer").style.display = "none";
+		} else {
+			document.querySelector("#cloudServer").style.display = "none";
+			document.querySelector("#premServer").style.display = "inline";
+		}
+	}
+
+</script>
+
+<script type="text/x-red" data-template-name="ICLogin">
+
+    <div class="form-row">
+        <label for="node-config-input-serverType"><i class="fa fa-arrow-circle-right"></i> Type</label>
+		<select id="node-config-input-serverType" onchange="updateServerType()">
+			<option value="cloud">Cloud</option>
+			<option value="onpremises">On Premises</option>
+		</select>
+    </div>
+	
+    <div class="form-row" id="cloudServer">
+        <label for="node-config-input-cloudServer"><i class="fa fa-arrow-circle-right"></i> Instance</label>
+		<select id="node-config-input-cloudServer"">
+			<option value="europe">European DC</option>
+			<option value="america">North America DC</option>
+		</select>
+    </div>
+	
+    <div class="form-row" id="premServer">
+        <label for="node-config-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-config-input-server" placeholder="Server">
+    </div>
+	
+    <div class="form-row">
+        <label for="node-config-input-username"><i class="fa fa-user"></i> Username</label>
+        <input type="text" id="node-config-input-username" placeholder="Username">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-password"><i class="fa fa-key"></i> Password</label>
+        <input type="password" id="node-config-input-password" placeholder="Password">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="ICLogin">
+   <p>Log into IBM Connections.</p>
+   
+   <p><i>Returns:</i> an object with original <b>payload</b> attribute, and a <b>connections_login</b> attribute if login is successfull.</p>
+</script>
+
+
