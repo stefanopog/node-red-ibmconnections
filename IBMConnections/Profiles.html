@@ -156,30 +156,35 @@
                document.querySelector("#tagRow").style.display = "none";
                document.querySelector("#keywordRow").style.display = "none";
                document.querySelector("#syntaxRow").style.display = "none";
+               document.querySelector("#linkRow").style.display = "inline";
                break;
            case 'myself' :
                document.querySelector("#targetRow").style.display = "none";
                document.querySelector("#tagRow").style.display = "none";
                document.querySelector("#keywordRow").style.display = "none";
                document.querySelector("#syntaxRow").style.display = "none";
+               document.querySelector("#linkRow").style.display = "inline";
                break;
            case 'byTag' :
                document.querySelector("#targetRow").style.display = "none";
                document.querySelector("#tagRow").style.display = "inline";  
                document.querySelector("#keywordRow").style.display = "none";
                document.querySelector("#syntaxRow").style.display = "none";
+               document.querySelector("#linkRow").style.display = "none";
                break;
            case 'byKeyword' :
                document.querySelector("#targetRow").style.display = "none";
                document.querySelector("#tagRow").style.display = "none";  
                document.querySelector("#keywordRow").style.display = "inline";
                document.querySelector("#syntaxRow").style.display = "none";
-               break;
+               document.querySelector("#linkRow").style.display = "none";
+              break;
            case 'syntaxSearch' :
                document.querySelector("#targetRow").style.display = "none";
                document.querySelector("#tagRow").style.display = "none";  
                document.querySelector("#keywordRow").style.display = "none";
                document.querySelector("#syntaxRow").style.display = "inline";
+               document.querySelector("#linkRow").style.display = "none";
                break;
        }
    }
@@ -272,7 +277,7 @@
     </tr>
     <tr>
     <td>
-    <div class="form-row">
+    <div class="form-row" id="linkRow">
         <input style="display: inline-block; width: auto; vertical-align: top;" type="checkbox" name="links" id="node-input-links"></input>
         <label for="node-input-links"><i class="fa fa-odnoklassniki"></i> Linkroll</label>
     </div>

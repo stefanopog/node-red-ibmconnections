@@ -189,9 +189,21 @@ module.exports = function(RED) {
                                 }
                                 if (result.feed.entry) {
                                     theMsg.payload = _getUserDetail(result.feed.entry[0]);
-                                    //_getProfileLinks(theMsg, theMsg.payload, username, password);
-                                    node.status({});
-                                    node.send(theMsg);
+                                    if (config.links) {
+                                        //
+                                        //  Fetch Linkroll
+                                        //  Since this is another REST call, the task to return control to
+                                        //  the flow is left to the function that will be invoked (and, thus, to
+                                        //  its callback function)
+                                        //
+                                        _getProfileLinks(theMsg, theMsg.payload, username, password);
+                                    } else {
+                                        //
+                                        //  Safely return node results as no other action is required
+                                        //
+                                        node.status({});
+                                        node.send(theMsg);
+                                    }
                                 } else {
                                     console.log(err);
                                     node.status({fill:"red",shape:"dot",text:"No Entry "});
@@ -265,64 +277,73 @@ module.exports = function(RED) {
             ).auth(username,password); // end http.post           
         }
 
+        //
+        //  The following method must be called as the last one of a chain since it performs the
+        //  closing operations and the transfer to the flow
+        //
         function _getProfileLinks(theMsg, data, username, password) {
-            var theURL = '';
-            if (config.links) {
-                theURL = server + '/profiles/atom/profileExtension.do?key=' + data.key + '&extensionId=profileLinks';
-                http.get(
-                    {
-                        url: theURL, 
-                        method: "GET",
-                        headers:{
-                          "Content-Type" : "application/atom+xml; charset=UTF-8",
-                          "User-Agent" : "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0"
-                        }
-                    },
-                    function(error,response,body) {
-                        if (error) {
-                            console.log("error getting profileLinks for profile : " + theURL);
-                            node.status({fill:"red",shape:"dot",text:"No Profile Info"});
-                            node.error(error.toString(), theMsg);
-                        } else {
-                            if (response.statusCode == 200) {
-                                console.log("GET OK (" + response.statusCode + ")");
-                                console.log(body);
-                                parser.parseString(body, function (err, result) {
-                                    if (err) {
-                                        console.log(err);
-                                        node.status({fill:"red",shape:"dot",text:"Parser Error"});
-                                        node.error("Parser Error _getProfileLinks", theMsg);
-                                        return;
-                                    }
-                                    var links = [];
-                                    var theLink = {};
-                                    for (i=0; i < result.linkroll.link.length; i++) {
-                                        theLink.url = result.linkroll.link[i]["$"].name;
-                                        theLink.name = result.linkroll.link[i]["$"].url;
-                                        links.push(theLink);
-                                    }
-                                    data.linkroll = links;
-                                });
-                            } else {
-                                console.log("GET PROFILELINKS NOT OK (" + response.statusCode + ")");
-                                console.log(body);
-                            }
-                        }
+            var theURL = server + '/profiles/atom/profileExtension.do?key=' + data.key + '&extensionId=profileLinks';
+            http.get(
+                {
+                    url: theURL,
+                    method: "GET",
+                    headers:{
+                      "Content-Type" : "application/atom+xml; charset=UTF-8",
+                      "User-Agent" : "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0"
                     }
-                ).auth(username,password); // end http.post           
-            }            
+                },
+                function(error,response,body) {
+                    if (error) {
+                        console.log("error getting profileLinks for profile : " + theURL);
+                        node.status({fill:"red",shape:"dot",text:"No Profile Info"});
+                        node.error(error.toString(), theMsg);
+                    } else {
+                        if (response.statusCode == 200) {
+                            console.log("GET OK (" + response.statusCode + ")");
+                            console.log(body);
+                            parser.parseString(body, function (err, result) {
+                                if (err) {
+                                    console.log(err);
+                                    node.status({fill:"red",shape:"dot",text:"Parser Error"});
+                                    node.error("Parser Error _getProfileLinks", theMsg);
+                                    return;
+                                }
+                                var links = [];
+                                for (i=0; i < result.linkroll.link.length; i++) {
+                                    var theLink = {};
+                                    theLink.name = result.linkroll.link[i]["$"].name;
+                                    theLink.url = result.linkroll.link[i]["$"].url;
+                                    links.push(theLink);
+                                }
+                                theMsg.payload.linkroll = links;
+                                console.log(theMsg.payload.linkroll);
+                                //
+                                //  Return control to the flow
+                                //
+                                node.status({});
+                                node.send(theMsg);
+                            });
+                        } else {
+                            console.log("GET PROFILELINKS NOT OK (" + response.statusCode + ")");
+                            console.log(body);
+                            node.status({fill:"red",shape:"dot",text:"Err4 " + response.statusMessage});
+                            node.error(response.statusCode + ' : ' + response.body, theMsg);
+                       }
+                    }
+                }
+            ).auth(username,password); // end http.post
         }
         
         
-        function getProfileLinks(theMsg, data, username, password) {
+        //function getProfileLinks(theMsg, data, username, password) {
             //
             //  We need to retrieve ProfileLinks for all the persons that have been retrieved from the previous calls
             //
-            for (i=0; i < data.length; i++) {
-                _getProfileLinks(theMsg, data[i], username, password);
-                JSON.stringify(data[i], ' ', 2);
-            }
-        }
+            //for (i=0; i < data.length; i++) {
+            //    _getProfileLinks(theMsg, data[i], username, password);
+            //    JSON.stringify(data[i], ' ', 2);
+            //}
+        //}
        
         this.on(
             'input', 
@@ -368,7 +389,7 @@ module.exports = function(RED) {
                             } else {
                                 theKeywords = msg.keywords;
                             } 
-                            myURL = server  + "/profiles/atom/search.do?sortBy=relevance&search=" + theKeywords + '&format=full';
+                            myURL = server  + "/profiles/atom/search.do?sortBy=relevance&search=" + theKeywords + '&format=full&ps=1000';
                             //
                             // get Profile By Tags
                             //
@@ -391,7 +412,7 @@ module.exports = function(RED) {
                             } else {
                                 theTags = msg.tags;
                             } 
-                            myURL = server  + "/profiles/atom/search.do?profileTags=" + theTags + '&format=full';
+                            myURL = server  + "/profiles/atom/search.do?profileTags=" + theTags + '&format=full&ps=1000';
                             //
                             // get Profile By Tags
                             //
