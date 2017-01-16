@@ -1,6 +1,6 @@
 {
   "name": "node-red-ibmconnections",
-  "version": "0.2.0",
+  "version": "0.2.1",
    "description": "Set of nodes to manipulate IBM Connections APIs",
   "dependencies": {
     "request": "*",
@@ -39,7 +39,7 @@
     ]
   ],
   "_from": "node-red-ibmconnections@latest",
-  "_id": "node-red-ibmconnections@0.2.0",
+  "_id": "node-red-ibmconnections@0.2.1",
   "_inCache": true,
   "_installable": true,
   "_location": "/node-red-ibmconnections",
@@ -60,7 +60,7 @@
   "_requiredBy": [
     "#USER"
   ],
-  "_resolved": "https://registry.npmjs.org/node-red-ibmconnections/-/node-red-ibmconnections-0.2.0.tgz",
+  "_resolved": "https://registry.npmjs.org/node-red-ibmconnections/-/node-red-ibmconnections-0.2.1.tgz",
   "_shasum": "3ee3a820ee154425702cbae650617b9ab3407b9d",
   "_shrinkwrap": null,
   "_spec": "node-red-ibmconnections",
@@ -69,7 +69,7 @@
   "directories": {},
   "dist": {
     "shasum": "3ee3a820ee154425702cbae650617b9ab3407b9d",
-    "tarball": "https://registry.npmjs.org/node-red-ibmconnections/-/node-red-ibmconnections-0.2.0.tgz"
+    "tarball": "https://registry.npmjs.org/node-red-ibmconnections/-/node-red-ibmconnections-0.2.1.tgz"
   },
   "maintainers": [
     {

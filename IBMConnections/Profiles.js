@@ -280,6 +280,8 @@ module.exports = function(RED) {
         //
         //  The following method must be called as the last one of a chain since it performs the
         //  closing operations and the transfer to the flow
+        //  When an error is found, it does NOT return an error to the flow. It simples signals with a YELLOW DOT
+        //  and DOES NOT fill the payload.linkroll property
         //
         function _getProfileLinks(theMsg, data, username, password) {
             var theURL = server + '/profiles/atom/profileExtension.do?key=' + data.key + '&extensionId=profileLinks';
@@ -295,8 +297,7 @@ module.exports = function(RED) {
                 function(error,response,body) {
                     if (error) {
                         console.log("error getting profileLinks for profile : " + theURL);
-                        node.status({fill:"red",shape:"dot",text:"No Profile Info"});
-                        node.error(error.toString(), theMsg);
+                        node.status({fill:"yellow",shape:"dot",text:"No Profile Info"});
                     } else {
                         if (response.statusCode == 200) {
                             console.log("GET OK (" + response.statusCode + ")");
@@ -304,32 +305,30 @@ module.exports = function(RED) {
                             parser.parseString(body, function (err, result) {
                                 if (err) {
                                     console.log(err);
-                                    node.status({fill:"red",shape:"dot",text:"Parser Error"});
-                                    node.error("Parser Error _getProfileLinks", theMsg);
-                                    return;
+                                    node.status({fill:"yellow",shape:"dot",text:"Parser Error _getProfileLinks"});
+                                } else {
+                                    var links = [];
+                                    for (i=0; i < result.linkroll.link.length; i++) {
+                                        var theLink = {};
+                                        theLink.name = result.linkroll.link[i]["$"].name;
+                                        theLink.url = result.linkroll.link[i]["$"].url;
+                                        links.push(theLink);
+                                    }
+                                    theMsg.payload.linkroll = links;
+                                    console.log(theMsg.payload.linkroll);
+                                    //
+                                    //  Return control to the flow
+                                    //
+                                    node.status({});
                                 }
-                                var links = [];
-                                for (i=0; i < result.linkroll.link.length; i++) {
-                                    var theLink = {};
-                                    theLink.name = result.linkroll.link[i]["$"].name;
-                                    theLink.url = result.linkroll.link[i]["$"].url;
-                                    links.push(theLink);
-                                }
-                                theMsg.payload.linkroll = links;
-                                console.log(theMsg.payload.linkroll);
-                                //
-                                //  Return control to the flow
-                                //
-                                node.status({});
-                                node.send(theMsg);
                             });
                         } else {
                             console.log("GET PROFILELINKS NOT OK (" + response.statusCode + ")");
                             console.log(body);
-                            node.status({fill:"red",shape:"dot",text:"Err4 " + response.statusMessage});
-                            node.error(response.statusCode + ' : ' + response.body, theMsg);
-                       }
+                            node.status({fill:"yellow",shape:"dot",text:" _getProfileLinks " + response.statusMessage});
+                        }
                     }
+                    node.send(theMsg);
                 }
             ).auth(username,password); // end http.post
         }
