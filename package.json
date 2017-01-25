@@ -31,7 +31,6 @@
     }
   },
 
-    
 "_args": [
     [
       "node-red-ibmconnections",
@@ -84,5 +83,3 @@
   "optionalDependencies": {},
   "scripts": {}
 }
-
-
