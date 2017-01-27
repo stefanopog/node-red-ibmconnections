@@ -1,0 +1,254 @@
+<script type="text/javascript">
+    RED.nodes.registerType(
+        'CommunitiesGet',
+        {
+            category: "social",
+            inputs: 1,
+            outputs:1,
+            icon: "ibmconnections.png",
+            color: "#FFFFFF",
+            label: function() {
+                    return this.name ||'Get Communities';
+                    },
+            paletteLabel : "Get Communities",
+            defaults : {
+                name: {
+                            value: ""
+                },
+                server: {
+                            value : "",
+                            required: true,
+                            type: "ICLogin"
+                },
+                target: {
+                            value : "AllCommunities",
+                            required: true
+                },
+                communityTag: {
+                            value : "",
+                            required: false
+                },
+                email: {
+                            value : "",
+                            required: false
+                },
+            },
+            oneditprepare: updateFormCommunitiesGet
+        });
+
+   function updateFormCommunitiesGet() {
+       switch (document.querySelector("#node-input-target").value) {
+           case "AllCommunities" :
+               document.querySelector("#tagRow").style.display = "inline";
+               document.querySelector("#userRow").style.display = "none";
+               break;
+           case "UserCommunities" :
+               document.querySelector("#tagRow").style.display = "inline";
+               document.querySelector("#userRow").style.display = "inline";
+               break;
+       }
+   }
+</script>
+
+<script type="text/x-red" data-template-name="CommunitiesGet">
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-input-server" placeholder="Server">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-target"><i class="fa fa-arrow-circle-right"></i> Search</label>
+        <select id="node-input-target" onchange="updateFormCommunitiesGet()">
+	       <option value="AllCommunities">All Communities</option>
+	       <option value="UserCommunities">User Communities</option>
+        </select>
+        <br />
+    </div>
+
+    <div class="form-row" id="userRow">
+        <label for="node-input-email"><i class="fa fa-odnoklassniki"></i> User</label>
+        <input type="text" id="node-input-communityId" placeholder="email"></input>
+        <br />
+    </div>
+
+    <div class="form-row" id="tagRow">
+        <label for="node-input-communityTag"><i class="fa fa-tag"></i> Tag</label>
+        <input type="text" id="node-input-communityTag" placeholder="tag"></input>
+        <br />
+   </div>
+    <!--
+    <div class="form-row" id="idRow">
+        <label for="node-input-activityId"><i class="fa fa-tag"></i> ID</label>
+        <input type="text" id="node-input-activityId" placeholder="Activity ID"></input>
+        <br />
+    </div>
+
+    <div class="form-row" id="isTemplateRow">
+        <label for="node-input-isTemplate"><i class="fa fa-check-square"></i> Is Template ?</label>
+        <input type="checkbox" name="isTemplate" id="node-input-isTemplate"></input>
+         <br />
+   </div>
+
+    <div class="form-row" id="isAtom">
+        <label for="node-input-isAtom"><i class="fa fa-check-square"></i> Get Atom ?</label>
+        <input type="checkbox" name="isAtom" id="node-input-isAtom"></input>
+        <br />
+    </div>
+    -->
+    <br />
+
+    <div class="form-row">
+        <hr />
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</span></label>
+        <input type="text" id="node-input-name" ></input>
+    </div>
+
+ </script>
+
+<script type="text/x-red" data-help-name="CommunitiesGet">
+   <p>Retrieves a list of Communities based on selection criteria.</p>
+   <p>It can retrieve:
+   <ul>
+   <li><b>All Public Communities</b>, possibly filtered by <i>tag</i></li>
+   <li><b>All User's Communities</b>, possibly filtered by <i>tag</i></li>
+   </ul>
+   </p>
+   <p><i>Inputs:</i>
+   <ul>
+   <li><code>msg.email</code> : if set, it contains the email of a user for whom to search communities.</li>
+   <li><code>msg.communityTag</code> : the name of a single tag used for filtering the search criteria.</li>
+   </ul></p>
+   <p><i>Returns:</i>
+   <ul>
+   <li><code>msg.payload</code>. This is an array of objects where each object has the following properties:
+   <ul>
+<!--
+   <li><b>title</b> the name of the retrieved Activity/li>
+   <li><b>id</b> the ID of the retrieved Activity</li>
+   <li><b>ref</b> the href for the <i>self</i> link</li>
+   <li><b>entry</b> the ATOM representation of the retrieved Activity (in case the checkbox on the configuration panel is set accordingly)</li>
+-->
+   </ul>
+   The Array is empty in case no Community is found.
+   </li>
+   </ul>
+   </p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType(
+        'ASGet',
+        {
+            category: "social",
+            inputs: 1,
+            outputs:1,
+            icon: "ibmconnections.png",
+            color: "#FFFFFF",
+            label: function() {
+                    return this.name ||'Get Community AS';
+                    },
+            paletteLabel : "Get Community AS",
+            defaults : {
+                name: {
+                    value: "",
+                    required: false
+                },
+                server: {
+                    value : "",
+                    required: true,
+                    type: "ICLogin"
+                },
+                target: {
+                    value : "All",
+                    required: true
+                },
+                communityId: {
+                    value: "",
+                    required: false
+                },
+                lastItemDate: {
+                    value: "",
+                    required: false
+                }
+            },
+            oneditprepare: updateFormASGet
+        });
+
+   function updateFormASGet() {
+//       switch (document.querySelector("#node-input-target").value) {
+//           case "AllCommunities" :
+//               document.querySelector("#tagRow").style.display = "inline";
+//               document.querySelector("#userRow").style.display = "inline";
+//               break;
+//           case "UserCommunities" :
+//               document.querySelector("#tagRow").style.display = "inline";
+//               document.querySelector("#userRow").style.display = "none";
+//               break;
+//       }
+   }
+</script>
+
+<script type="text/x-red" data-template-name="ASGet">
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-input-server" placeholder="Server">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-target"><i class="fa fa-arrow-circle-right"></i> Search</label>
+        <select id="node-input-target" onchange="updateFormASGet()">
+	       <option value="All">All</option>
+	       <option value="activities">Activities</option>
+	       <option value="blogs">Blogs</option>
+	       <option value="files">Files</option>
+	       <option value="forums">Forums</option>
+	       <option value="wikis">Wikis</option>
+	       <option value="bookmarks">Bookmarks</option>
+	       <option value="@status">Status updates</option>
+        </select>
+        <br />
+    </div>
+    <br />
+
+    <div class="form-row">
+        <label for="node-input-communityId"><i class="fa fa-tag"></i> Comm. Id</span></label>
+        <input type="text" id="node-input-communityId" ></input>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-lastItemDate"><i class="fa fa-institution"></i> Since</span></label>
+        <input type="datetime" id="node-input-lastItemDate" ></input>
+    </div>
+
+    <div class="form-row">
+        <hr />
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</span></label>
+        <input type="text" id="node-input-name" ></input>
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="ASGet">
+   <p>Retrieves a community activity stream, optionally filtered by application.</p>
+   <p><i>Inputs:</i>
+   <ul>
+   <li><code>msg.communityId</code> : The community for which the AS is retrieved.</li>
+   <li><code>msg.lastItemDate</code> : The date of the last item seen, to see only items more recent than this date. (optional)</li>
+   </ul></p>
+   <p><i>Returns:</i>
+   <ul>
+   <li><code>msg.payload</code>. This is an array of objects where each object has the following properties:
+   <ul>
+<!--
+   <li><b>title</b> the name of the retrieved Activity/li>
+   <li><b>id</b> the ID of the retrieved Activity</li>
+   <li><b>ref</b> the href for the <i>self</i> link</li>
+   <li><b>entry</b> the ATOM representation of the retrieved Activity (in case the checkbox on the configuration panel is set accordingly)</li>
+-->
+   </ul>
+   The Array is empty in case no entries are found.
+   </li>
+   </ul>
+   </p>
+</script>
+

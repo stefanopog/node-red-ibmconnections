@@ -1,9 +1,13 @@
 module.exports = function(RED) {
-    function ProfilesOut(config) {      
+   function ProfilesOut(config) {
         RED.nodes.createNode(this,config);        
+
+        var endSlash = new RegExp("/" + "+$");
         var node = this;
-        var status = config.status;
-        var target = (config.target == "myboard" ? "@me" : ("urn:lsid:lconn.ibm.com:profiles.person:" + config.targetValue) );
+        var userId = "";
+        var myURL = "";
+        var newStatus = "";
+        var newStatusJSON = "";
 
         this.customLabel = function(){
             return "Write a message to " + (config.target == "myboard" ? "my board" : "someone's board");
@@ -12,43 +16,136 @@ module.exports = function(RED) {
         var http = require("request");
 
         this.on('input', function(msg) {
-            var myData = {};
-            myData.content = status.replace("%s",msg.payload);
-            myData2 = JSON.stringify(myData);	   
             var serverConfig = RED.nodes.getNode(config.server);
 
-            var server   =  serverConfig.server;
-            var username =  serverConfig.username;
-            var password =  serverConfig.password;
+            var server   = "";
+            var context  = "";
+            var username = serverConfig.username;
+            var password = serverConfig.password;
 
-            if (server.toLowerCase().indexOf("w3-connections") != -1){
-             context = "/common";
+            //
+            //	Retrieving Configuration from LOGIN node
+            //
+            if (serverConfig.serverType == "cloud") {
+                if (serverConfig.cloudServer == "europe") {
+                    server = "https://apps.ce.collabserv.com";
+                } else {
+                    server = "https://apps.na.collabserv.com";
+                }
+            } else {
+                server   = serverConfig.server;
+                //
+                //	Remove trailing "slash" in case it is there
+                //
+                server   = server.replace(endSlash, "");
             }
-            else{
-             context = "/connections";
+            //
+            //  Deal with specific W3-Connections
+            //
+            if (server.toLowerCase().indexOf("w3-connections") != -1) {
+                context = "/common";
+            } else {
+                context = "/connections";
             }
+            //
+            //  Check if there is a message to send first
+            //
+            if ((config.status == '') && ((msg.payload == undefined) || (msg.payload == ''))) {
+                //
+                //  There is an issue
+                //
+                console.log("No Msg to be sent");
+                node.status({fill:"red",shape:"dot",text:"No Msg to be sentr"});
+                node.error('No Msg to be sent', theMsg);
+                return;
+             } else {
+                if (config.status != '') {
+                    newStatus = config.status;
+                } else {
+                    newStatus = msg.payload;
+                }
+                var myData = {};
+                myData.content = newStatus;
+                newStatusJSON = JSON.stringify(myData);
+            }
+            //
+            //  Check to whom send the message
+            //
+            if (config.target == "myboard") {
+                userId = "@me";
+            } else {
+                if ((config.userId == '') && ((msg.userId == undefined) || (msg.userId == ''))) {
+                    //
+                    //  There is an issue
+                    //
+                    console.log("Missing target user Information");
+                    node.status({fill:"red",shape:"dot",text:"Missing Target User"});
+                    node.error('Missing Target User', theMsg);
+                    return;
+                 } else {
+                    if (config.userId != '') {
+                        userId = config.userId;
+                    } else {
+                        userId = msg.userId;
+                    }
+                }
+            }
+            //
+            //  Start Build target URL
+            //
+            myURL = server + context + "/opensocial/basic/rest/ublog/" + userId + "/@all";
+            //
+            //  Check if it is Comment
+            //
+            if (config.isComment) {
+                if ((config.postId == '') && ((msg.postId == undefined) || (msg.postId == ''))) {
+                    //
+                    //  There is an issue
+                    //
+                    console.log("Missing PostIds Information");
+                    node.status({fill:"red",shape:"dot",text:"Missing PostId"});
+                    node.error('Missing PostId', theMsg);
+                    return;
+                 } else {
+                    if (config.postId != '') {
+                        postId = config.postId;
+                    } else {
+                        postId = msg.postId;
+                    }
+                    myURL += "/" + postId + "/comments";
+                 }
+            }
+            //
+            //  Now, let's send the message
+            //
+            node.status({fill:"blue",shape:"dot",text:"Posting..."});
             http.post(
                 {
-                    url: server + context + "/opensocial/basic/rest/ublog/"+target+"/@all", 
-                    body: myData2,
+                    url: myURL,
+                    body: newStatusJSON,
                     headers:{
                       "Content-Type" : "application/json; charset=UTF-8",
                       "User-Agent" : "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0"
                     }
                 },
                 function(error,response,body){
-                    if (error){
-                        console.log("error !");
+                    if (error) {
+                        console.log("error in posting : " + myURL);
+                        node.status({fill:"red",shape:"dot",text:error.toSring()});
                         node.error(error.toString(), msg);
                     } else { 
                         if ((response.statusCode >= 200) && (response.statusCode < 300)) {
                             console.log("POST OK (" + response.statusCode + ")");
                             console.log(body);
                             var json = JSON.parse(body);
-                            var url = json.entry.url;
-                            node.send({status_url:url,status:myData.content,payload:msg.payload});
+                            msg.status_url = json.entry.url;
+                            node.status({});
+                            node.send(msg);
                         } else {
-                            node.error(error.toString(), msg);
+                            console.log("POST TO PROFILE NOT OK (" + response.statusCode + ")");
+                            console.log(body);
+                            node.status({fill:"red",shape:"dot",text:"Err3 " + response.statusMessage});
+                            node.error(response.statusCode + ' : ' + response.statusMessage, msg);
                         }
                     }
                 }

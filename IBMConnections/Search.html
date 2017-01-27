@@ -1,0 +1,128 @@
+<script type="text/javascript">
+    RED.nodes.registerType(
+        'SimpleSearch',
+        {
+            category: "social",
+            inputs: 1,
+            outputs:1,
+            icon: "ibmconnections.png",
+            color: "#FFFFFF",
+            label: function() {
+                    return this.name ||'Simple Search';
+            },
+            paletteLabel : "Simple Search",
+            defaults : {
+                name: {
+                    value: "",
+                    required: false
+                },
+                server: {
+                    value : "",
+                    required: true,
+                    type: "ICLogin"
+                },
+                query: {
+                    value : "",
+                    required: false
+                },
+                theScope: {
+                    value : "allconnections",
+                    required: true
+                },
+                sortKey: {
+                    value : "date",
+                    required: false
+                },
+                sortOrder: {
+                    value : "desc",
+                    required: false
+                },
+                mytags: {
+                    value : "",
+                    required: false
+                }
+            },
+            oneditprepare: updateFormSearch
+        });
+
+   function updateFormSearch() {
+   }
+</script>
+
+<script type="text/x-red" data-template-name="SimpleSearch">
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-input-server" placeholder="Server">
+    </div>
+
+    <div class="form-row" id="targetRow">
+        <label for="node-input-query"><i class="fa fa-tag"></i> Query</label>
+        <input type="text" id="node-input-query" placeholder="Valid Connections query"></input>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-theScope"><i class="fa fa-arrow-circle-right"></i> Scope</label>
+        <select id="node-input-theScope">
+	       <option value="allconnections">All Connections</option>
+	       <option value="allExceptProfiles">All Except Profiles</option>
+	       <option value="activities">Activities</option>
+	       <option value="blogs">Blogs</option>
+	       <option value="communities">Communities</option>
+	       <option value="dogear">Bookmarks</option>
+	       <option value="files">Files</option>
+	       <option value="forums">Forums</option>
+	       <option value="profiles">Profilesx</option>
+	       <option value="wikis">Wikisx</option>
+	       <option value="status_updates">Status Updates</option>
+	       <option value="personalOnly">Personal Only</option>
+	       <option value="personalOnlyByACL">Personal Only By ACL</option>
+	       <option value="stand-alone">StandAlonex</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-sortKey"><i class="fa fa-arrow-circle-right"></i> Sort Key</label>
+        <select id="node-input-sortKey">
+	       <option value="date">Date</option>
+	       <option value="relevance">Relevance</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-sortOrder"><i class="fa fa-arrow-circle-right"></i> Sort Order</label>
+        <select id="node-input-sortOrder">
+	       <option value="asc">Ascending</option>
+	       <option value="desc">Descending</option>
+        </select>
+    </div>
+
+    <div class="form-row" id="tagRow">
+        <label for="node-input-mytags"><i class="fa fa-tag"></i> Tags</label>
+        <input type="text" id="node-input-mytags" placeholder="tags"></input>
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</span></label>
+        <input type="text" id="node-input-name" ></input>
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="SimpleSearch">
+   <p>Performs an IBM Connection SEARCH operation.</p>
+   <p>The <b>query</b> can either be passed in the configuration panel or via the <code>msg.query</code> input.
+    </p>
+    <br />
+   <p><b>Returns:</b>
+   It returns an array of objects, each with the following inform
+   <ul>
+        <li><code>id</code> : the IBM Connections unique ID for the retrievd item </li>
+        <li><code>date</code> : the Update Date for the item </li>
+        <li><code>title</code> : the title of the item </li>
+        <li><code>userid</code> : the IBM Connections User Id of the author </li>
+        <li><code>mail</code> : the mail address of the user </li>
+        <li><code>name>name</code> : the name of teh user </li>
+    </ul>
+    </p>
+</script>

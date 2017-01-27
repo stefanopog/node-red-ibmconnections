@@ -8,8 +8,8 @@
             icon: "ibmconnections.png",
             color: "#FFFFFF",
             align: "right",
-            label: "profiles",
-            paletteLabel : "Profiles Out",
+            label: "Post to AS",
+            paletteLabel : "Post to AS",
             credentials: {
                 username: {type:"text"},
                 password: {type:"password"}
@@ -20,29 +20,49 @@
                             required: true,
                             type: "ICLogin"
                 },
-                status: {
-                            value : "Hello from Node-RED :) (payload = %s)",
-                            required: true
-                },
                 target: {
                             value : "myboard",
                             required: true
                 },
-                targetValue: {
-                            value : "@me",
+                userId: {
+                            value : "",
+                            required: false
+                },
+                status: {
+                            value : "",
+                            required: false
+                },
+                isComment: {
+                            value : false,
+                            required: false
+                },
+                postId: {
+                            value : "",
                             required: false
                 },
             },
-            oneditprepare: updateFormProfilesOut
+            oneditprepare: updateFormProfilesOutAll
         });
 
-   function updateFormProfilesOut(){ 
+   function updateFormProfilesOut() {
 	   if (document.querySelector("#node-input-target").value == "person"){
-	    document.querySelector("#targetRow").style.display = "inline";
+	       document.querySelector("#targetRow").style.display = "inline";
+	   } else {
+	       document.querySelector("#targetRow").style.display = "none";
 	   }
-	   else{
-	    document.querySelector("#targetRow").style.display = "none";
+   }
+
+   function updateFormIsComment() {
+	   if (document.querySelector("#node-input-isComment").checked) {
+           document.querySelector("#postRow").style.display = "inline";
+	   } else {
+           document.querySelector("#postRow").style.display = "none";
 	   }
+   }
+
+   function updateFormProfilesOutAll(){
+       updateFormIsComment();
+       updateFormProfilesOut();
    }
 </script>
 
@@ -51,6 +71,7 @@
         <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
         <input type="text" id="node-input-server" placeholder="Server">
     </div>
+
     <div class="form-row">
         <label for="node-input-target"><i class="fa fa-arrow-circle-right"></i> Target</label>
         <select id="node-input-target" onchange="updateFormProfilesOut()">
@@ -59,19 +80,36 @@
         </select>
     </div>
     <div class="form-row" id="targetRow">
-        <label for="node-input-targetValue"><i></i> User ID</label>
-        <input type="text" id="node-input-targetValue" placeholder="User ID (ie. toto@myorg.com OR 51689d40-e7ed-102f-87b6-86a3c2278316)">
+        <label for="node-input-userId"><i></i> User ID</label>
+        <input type="text" id="node-input-userId" placeholder="User ID (ie. toto@myorg.com OR 51689d40-e7ed-102f-87b6-86a3c2278316)">
     </div>
+
     <div class="form-row">
-        <label for="node-input-status"><i class="fa fa-weixin"></i> Status update</label>
+        <br />
+        <label for="node-input-status"><i class="fa fa-weixin"></i> Message</label>
         <input type="text" id="node-input-status" placeholder="Status update">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-isComment"><i class="fa fa-check"></i> Comment?</label>
+        <input style="display: inline-block; width: auto; vertical-align: top;" type="checkbox" name="isComment" id="node-input-isComment" onchange="updateFormIsComment()"></input>
+    </div>
+
+    <div class="form-row" id="postRow">
+        <label for="node-input-postId"><i class="fa fa-envelope"></i> Post ID</label>
+        <input type="text" id="node-input-postId" placeholder="Post ID ">
     </div>
 </script>
 
 <script type="text/x-red" data-help-name="ProfilesOut">
-   <p>Write a message to the profile board of the supplied user.</p>
-   <p>In the status update field, <b>%s</b> will be automatically replaced by <b>msg.payload</b> at runtime.</p>
-   <p><i>Returns:</i> an object with original <b>payload</b> attribute, a <b>status_url</b> attribute containing the url of the freshly created status update, and a <b>status</b> attribute containing the content of the status update.</p>
+   <p>Write a message (or a comment to an existing message) to the profile board of the supplied user.</p>
+   <p>The text to be sent can be either specified in the configuration panel or via the <code>msg.payload</code> input.</p>
+   <p>
+   The UserId of the target (in case <b>My Board</b> is not selected in the configuration panel) can be either the <i>ail address</i> or the <i>userId</i> of a valid user. The information can be provided either in the configuration panel or via the <code>msg.userId</code> input.</p>
+   <p>
+   In case a comment needs to be posted, the <b>ID</b> of the item for which the comment needs to be provided can be either specified in the configuration panel or via the <code>ms.postId</code> input.</p>
+   <p><b>Returns:</b></p>
+   <p>the original object with the additional <code>msg.status_url</code> attribute containing the url of the freshly created status update.</p>
 </script>
 
 
