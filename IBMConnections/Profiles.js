@@ -1,5 +1,5 @@
 module.exports = function(RED) {
-   function ProfilesOut(config) {
+   function ProfilesOut(config) {      
         RED.nodes.createNode(this,config);        
 
         var endSlash = new RegExp("/" + "+$");
@@ -37,7 +37,7 @@ module.exports = function(RED) {
                 //
                 //	Remove trailing "slash" in case it is there
                 //
-                server   = server.replace(endSlash, "");
+                server   = server.replace(endSlash, ""); 
             }
             //
             //  Deal with specific W3-Connections
@@ -87,7 +87,7 @@ module.exports = function(RED) {
                         userId = config.userId;
                     } else {
                         userId = msg.userId;
-                    }
+                    } 
                 }
             }
             //
@@ -111,17 +111,17 @@ module.exports = function(RED) {
                         postId = config.postId;
                     } else {
                         postId = msg.postId;
-                    }
+                    } 
                     myURL += "/" + postId + "/comments";
                  }
             }
             //
-            //  Now, let's send the message
+            //  Now, let's send the message 
             //
             node.status({fill:"blue",shape:"dot",text:"Posting..."});
             http.post(
                 {
-                    url: myURL,
+                    url: myURL, 
                     body: newStatusJSON,
                     headers:{
                       "Content-Type" : "application/json; charset=UTF-8",
@@ -216,7 +216,7 @@ module.exports = function(RED) {
                 },
                 function(error,response,body) {
                     if (error) {
-                        console.log("error getting information for MY profile !");
+                        console.log("error getting information for MY profile !", error);
                         node.status({fill:"red",shape:"dot",text:"No Profile Info"});
                         node.error(error.toString(), theMsg);
                     } else {
@@ -238,7 +238,6 @@ module.exports = function(RED) {
                                                 server + '/profiles/atom/profile.do?userid=' + result.service.workspace[0].collection[0]['snx:userid'][0], 
                                                 username, password);
                                 } else {
-                                    console.log(err);
                                     node.status({fill:"red",shape:"dot",text:"No Entry "});
                                     node.error('Missing <ENTRY> element', theMsg);
                                }
@@ -267,7 +266,7 @@ module.exports = function(RED) {
                 },
                 function(error,response,body) {
                     if (error) {
-                        console.log("error getting information for profile : " + theURL);
+                        console.log("error getting information for profile : " + theURL + " - " + error);
                         node.status({fill:"red",shape:"dot",text:"No Profile Info"});
                         node.error(error.toString(), theMsg);
                     } else {
@@ -302,10 +301,8 @@ module.exports = function(RED) {
                                         node.send(theMsg);
                                     }
                                 } else {
-                                    console.log(err);
                                     node.status({fill:"red",shape:"dot",text:"No Entry "});
                                     node.error('Missing <ENTRY> element', theMsg);
-                                    return;
                                }
                             });
                         } else {
@@ -331,7 +328,7 @@ module.exports = function(RED) {
                 },
                 function(error,response,body) {
                     if (error) {
-                        console.log("error getting information by PARAMS : " + theURL);
+                        console.log("error getting information by PARAMS : " + theURL + " - " + error);
                         node.status({fill:"red",shape:"dot",text:"No Profile Info"});
                         node.error('No Profile Info', theMsg);
                     } else {
@@ -358,7 +355,6 @@ module.exports = function(RED) {
                                     node.status({});
                                     node.send(theMsg);
                                 } else {
-                                    console.log(err);
                                     node.error('Missing <ENTRY> element', theMsg);
                                     node.status({fill:"red",shape:"dot",text:"No Entry "});
                                }
@@ -393,7 +389,7 @@ module.exports = function(RED) {
                 },
                 function(error,response,body) {
                     if (error) {
-                        console.log("error getting profileLinks for profile : " + theURL);
+                        console.log("error getting profileLinks for profile : " + theURL + " - " + error);
                         node.status({fill:"yellow",shape:"dot",text:"No Profile Info"});
                     } else {
                         if (response.statusCode == 200) {

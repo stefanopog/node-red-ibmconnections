@@ -388,7 +388,7 @@
                             required: false
                 },
             },
-            oneditprepare: updateFormActivitiesUpdate
+            oneditprepare: initializeActivitiesGet
         });
 
     
@@ -422,11 +422,7 @@
                document.querySelector("#toDoUserIdRow").style.display = "none";
                document.querySelector("#toDoUserNameRow").style.display = "none";
                document.querySelector("#inSectionRow").style.display = "inline";
-               if (document.querySelector("#node-input-inSection").checked) {
-	               document.querySelector("#sectionIdRow").style.display = "inline";
-	           } else {
-	               document.querySelector("#sectionIdRow").style.display = "none";
-	           }
+               updateInSection();
                break;
            case "ToDo" :
                document.querySelector("#sectionTitleRow").style.display = "none";
@@ -441,11 +437,7 @@
                document.querySelector("#toDoUserIdRow").style.display = "inline";
                document.querySelector("#toDoUserNameRow").style.display = "inline";
                document.querySelector("#inSectionRow").style.display = "inline";
-               if (document.querySelector("#node-input-inSection").checked) {
-	               document.querySelector("#sectionIdRow").style.display = "inline";
-	           } else {
-	               document.querySelector("#sectionIdRow").style.display = "none";
-	           }
+               updateInSection();
                break;
        }
     }
@@ -456,6 +448,20 @@
 	   } else {
 	       document.querySelector("#sectionIdRow").style.display = "none";
 	   }
+    }
+    
+    function initializeActivitiesGet() {
+        $( "#node-input-toDoDate" ).datepicker({
+                            showOn: "button",
+                            buttonImage: "icons/calendar.gif",
+                            buttonImageOnly: true,
+                            dateFormat: "dd/mm/yy",
+                            showButtonPanel: true,
+                            changeMonth: true,
+                            changeYear: true,
+                            buttonText: "Select date"
+        });
+        updateFormActivitiesUpdate();
     }
 </script>
 
@@ -526,7 +532,7 @@
     </div>
     <div class="form-row" id="toDoDateRow">
         <label for="node-input-toDoDate"><i class="fa fa-institution"></i> Date</label>
-        <input type="date" id="node-input-toDoDate" placeholder="format dd/mm/yyyy"></input>
+        <input type="date" id="node-input-toDoDate"></input>
         <br />    
     </div>
     <div class="form-row" id="toDoUserIdRow">

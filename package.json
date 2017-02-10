@@ -1,11 +1,75 @@
 {
-  "name": "node-red-ibmconnections",
-  "version": "0.3.0",
-  "description": "Set of nodes to manipulate IBM Connections APIs",
+  "_args": [
+    [
+      "node-red-ibmconnections",
+      ""
+    ],
+    [
+      {
+        "raw": "node-red-ibmconnections@0.3.2",
+        "scope": null,
+        "escapedName": "node-red-ibmconnections",
+        "name": "node-red-ibmconnections",
+        "rawSpec": "0.3.2",
+        "spec": "0.3.2",
+        "type": "version"
+      },
+      "/Users/stefano/.node-red"
+    ]
+  ],
+  "_from": "node-red-ibmconnections@0.3.2",
+  "_id": "node-red-ibmconnections@0.3.2",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/node-red-ibmconnections",
+  "_nodeVersion": "7.4.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/node-red-ibmconnections-0.3.2.tgz_1485539887736_0.8365596286021173"
+  },
+  "_npmUser": {
+    "name": "coccobill",
+    "email": "stefano@poglianis.net"
+  },
+  "_npmVersion": "4.1.1",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "node-red-ibmconnections@0.3.2",
+    "scope": null,
+    "escapedName": "node-red-ibmconnections",
+    "name": "node-red-ibmconnections",
+    "rawSpec": "0.3.2",
+    "spec": "0.3.2",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-red-ibmconnections/-/node-red-ibmconnections-0.3.2.tgz",
+  "_shasum": "8c458c7a9fc67431724c1dff791bbd271dfa9a3a",
+  "_shrinkwrap": null,
+  "_spec": "node-red-ibmconnections@0.3.2",
+  "_where": "/Users/stefano/.node-red",
+  "author": {
+    "name": "Romain Lienard",
+    "email": "rlienard@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/stefanopog/node-red-ibmconnections/issues"
+  },
   "dependencies": {
     "request": "*",
     "xml2js": "*"
   },
+  "description": "Set of nodes to manipulate IBM Connections APIs",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "8c458c7a9fc67431724c1dff791bbd271dfa9a3a",
+    "tarball": "https://registry.npmjs.org/node-red-ibmconnections/-/node-red-ibmconnections-0.3.2.tgz"
+  },
+  "gitHead": "abb8efffd35c4f18a9509fdb5676b19bf83ba138",
+  "homepage": "https://github.com/stefanopog/node-red-ibmconnections#readme",
   "keywords": [
     "node-red",
     "ibm",
@@ -14,63 +78,6 @@
     "status",
     "update"
   ],
-  "author": {
-    "name": "Romain Lienard",
-    "email": "rlienard@gmail.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stefanopog/node-red-ibmconnections.git"
-  },
-  "node-red": {
-    "nodes": {
-      "ICLogin": "IBMConnections/ICLogin.js",
-      "Embedded Exp out": "IBMConnections/EmbeddedExp.js",
-      "Profiles": "IBMConnections/Profiles.js",
-      "Activities": "IBMConnections/Activities.js",
-      "Communities": "IBMConnections/Communities.js",
-      "Search": "IBMConnections/Search.js"
-    }
-  },
-  "_args": [
-    [
-      "node-red-ibmconnections",
-      ""
-    ]
-  ],
-  "_from": "node-red-ibmconnections@latest",
-  "_id": "node-red-ibmconnections@0.3.0",
-  "_inCache": true,
-  "_installable": true,
-  "_location": "/node-red-ibmconnections",
-  "_npmUser": {
-    "name": "coccobill",
-    "email": "stefano@poglianis.net"
-  },
-  "_npmVersion": "3.10.10",
-  "_phantomChildren": {},
-  "_requested": {
-    "name": "node-red-ibmconnections",
-    "raw": "node-red-ibmconnections",
-    "rawSpec": "",
-    "scope": null,
-    "spec": "latest",
-    "type": "tag"
-  },
-  "_requiredBy": [
-    "#USER"
-  ],
-  "_resolved": "https://registry.npmjs.org/node-red-ibmconnections/-/node-red-ibmconnections-0.3.0.tgz",
-  "_shasum": "d750b25cbc31bd865b9e45f4c1562a216c1bc7c2",
-  "_shrinkwrap": null,
-  "_spec": "node-red-ibmconnections",
-  "_where": "",
-  "devDependencies": {},
-  "directories": {},
-  "dist": {
-    "shasum": "d750b25cbc31bd865b9e45f4c1562a216c1bc7c2",
-    "tarball": "https://registry.npmjs.org/node-red-ibmconnections/-/node-red-ibmconnections-0.3.0.tgz"
-  },
   "maintainers": [
     {
       "name": "coccobill",
@@ -81,13 +88,23 @@
       "email": "rlienard@gmail.com"
     }
   ],
-  "optionalDependencies": {},
-  "scripts": {},
-  "gitHead": "abb8efffd35c4f18a9509fdb5676b19bf83ba138",
-  "bugs": {
-    "url": "https://github.com/stefanopog/node-red-ibmconnections/issues"
+  "name": "node-red-ibmconnections",
+  "node-red": {
+    "nodes": {
+      "ICLogin": "IBMConnections/ICLogin.js",
+      "Embedded Exp out": "IBMConnections/EmbeddedExp.js",
+      "Profiles": "IBMConnections/Profiles.js",
+      "Activities": "IBMConnections/Activities.js",
+      "Communities": "IBMConnections/Communities.js",
+      "Search": "IBMConnections/Search.js"
+    }
   },
-  "homepage": "https://github.com/stefanopog/node-red-ibmconnections#readme",
-  "_nodeVersion": "7.2.1",
-  "readme": "ERROR: No README data found!"
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefanopog/node-red-ibmconnections.git"
+  },
+  "scripts": {},
+  "version": "0.3.2"
 }
