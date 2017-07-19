@@ -1,4 +1,5 @@
 Node-RED IBM Connections Nodes
+Contributor: Paulo Monteiro
 =====================================
 
 [![npm-version](https://img.shields.io/npm/v/node-red-node-watson.svg)](https://www.npmjs.com/package/node-red-ibmconnections)
